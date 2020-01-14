@@ -1,42 +1,44 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
+import { Link, graphql, useStaticQuery } from "gatsby"
 import React from "react"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
+import headerStyles from './header.module.scss'
 
-Header.propTypes = {
-  siteTitle: PropTypes.string,
+const Header = () => {
+
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          author
+          title
+        }
+      }
+    }
+  `)
+
+  return (
+    <header className={headerStyles.header}>
+      <div>
+        <h1>
+          <Link to="/" className={headerStyles.title}>{data.site.siteMetadata.title}</Link>
+        </h1>
+      </div>
+      <nav>
+        <ul className={headerStyles.navList}>
+          <li>
+            <Link to='about' className={headerStyles.navItem} activeClassName={headerStyles.activeNavItem}>About</Link>
+          </li>
+          <li>
+            <Link to='projects' className={headerStyles.navItem} activeClassName={headerStyles.activeNavItem}>Projects</Link>
+          </li>
+          <li>
+            <Link to='contact' className={headerStyles.navItem} activeClassName={headerStyles.activeNavItem}>Contact</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  )
 }
 
-Header.defaultProps = {
-  siteTitle: ``,
-}
 
 export default Header
